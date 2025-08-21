@@ -15,7 +15,7 @@ class Bot(Client):
         super().__init__(
             name="Bot",
             api_hash=API_HASH,
-            api_id=API_ID,  # fixed: you had APP_ID, but config.py uses API_ID
+            api_id=API_ID,  # 🔥 FIXED: use API_ID (not APP_ID)
             plugins={"root": "plugins"},
             workers=TG_BOT_WORKERS,
             bot_token=BOT_TOKEN
@@ -26,7 +26,7 @@ class Bot(Client):
         usr_bot_me = await self.get_me()
         self.uptime = datetime.now()
 
-        # DB channel check
+        # ✅ DB channel check
         try:
             db_channel = await self.get_chat(CHANNEL_ID)
             self.db_channel = db_channel
@@ -40,16 +40,16 @@ class Bot(Client):
         self.set_parse_mode(ParseMode.HTML)
         print(f"✅ Bot @{usr_bot_me.username} started successfully!")
 
-        # Start aiohttp web server (for Render free ping)
+        # ✅ Web server (Render health check + UptimeRobot)
         app = await web_server()
         runner = web.AppRunner(app)
         await runner.setup()
-        port = int(os.environ.get("PORT", 8080))  # Render provides PORT
+        port = int(os.environ.get("PORT", 8080))  # 🔥 Render provides PORT
         site = web.TCPSite(runner, "0.0.0.0", port)
         await site.start()
         print(f"🌐 Web server running on port {port}")
 
-        # Notify Owner
+        # ✅ Notify owner
         try:
             await self.send_message(OWNER_ID, "✅ Bot restarted successfully!")
         except:
