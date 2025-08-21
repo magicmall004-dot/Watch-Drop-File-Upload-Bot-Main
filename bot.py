@@ -7,6 +7,7 @@ from pyrogram.enums import ParseMode
 import sys
 from datetime import datetime
 from config import *
+PORT = int(os.environ.get("PORT", 8080))
 
 
 class Bot(Client):
