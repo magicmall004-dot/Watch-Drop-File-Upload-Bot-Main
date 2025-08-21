@@ -1,13 +1,12 @@
-import os
-import asyncio
 from aiohttp import web
+from plugins import web_server
+import asyncio
 import pyromod.listen
 from pyrogram import Client
 from pyrogram.enums import ParseMode
 import sys
 from datetime import datetime
 from config import *
-from plugins import web_server
 
 
 class Bot(Client):
@@ -15,10 +14,12 @@ class Bot(Client):
         super().__init__(
             name="Bot",
             api_hash=API_HASH,
-            api_id=API_ID,  # 🔥 FIXED: use API_ID (not APP_ID)
-            plugins={"root": "plugins"},
+            api_id=API_ID,   # ✅ fixed (was APP_ID)
+            plugins={
+                "root": "plugins"
+            },
             workers=TG_BOT_WORKERS,
-            bot_token=BOT_TOKEN
+            bot_token=TG_BOT_TOKEN
         )
 
     async def start(self):
@@ -26,32 +27,26 @@ class Bot(Client):
         usr_bot_me = await self.get_me()
         self.uptime = datetime.now()
 
-        # ✅ DB channel check
         try:
             db_channel = await self.get_chat(CHANNEL_ID)
             self.db_channel = db_channel
-            test = await self.send_message(chat_id=db_channel.id, text="Test Message")
+            test = await self.send_message(chat_id=db_channel.id, text="✅ Bot Connected Successfully!")
             await test.delete()
         except Exception as e:
-            print(f"⚠️ Error: {e}")
-            print(f"Make sure bot is Admin in DB Channel, and CHANNEL_ID={CHANNEL_ID}")
+            print(f"[ERROR] {e}")
+            print(f"❌ Make sure bot is Admin in DB Channel (ID: {CHANNEL_ID})")
             sys.exit()
 
         self.set_parse_mode(ParseMode.HTML)
-        print(f"✅ Bot @{usr_bot_me.username} started successfully!")
+        print(f"🤖 Bot @{usr_bot_me.username} started successfully!")
 
-        # ✅ Web server (Render health check + UptimeRobot)
-        app = await web_server()
-        runner = web.AppRunner(app)
-        await runner.setup()
-        port = int(os.environ.get("PORT", 8080))  # 🔥 Render provides PORT
-        site = web.TCPSite(runner, "0.0.0.0", port)
-        await site.start()
-        print(f"🌐 Web server running on port {port}")
+        # Start web server (needed for Render + UptimeRobot pings)
+        app = web.AppRunner(await web_server())
+        await app.setup()
+        await web.TCPSite(app, "0.0.0.0", PORT).start()
 
-        # ✅ Notify owner
         try:
-            await self.send_message(OWNER_ID, "✅ Bot restarted successfully!")
+            await self.send_message(OWNER_ID, text="<b>✅ Bot Restarted and is now Online!</b>")
         except:
             pass
 
@@ -65,7 +60,7 @@ class Bot(Client):
         try:
             loop.run_forever()
         except KeyboardInterrupt:
-            print("Shutting down...")
+            print("⚠️ Shutting down...")
         finally:
             loop.run_until_complete(self.stop())
 
