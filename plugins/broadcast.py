@@ -11,6 +11,7 @@ from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 from bot import Bot
 from config import *
 from database.database import db
+from plugins.admin import admin
 
 REPLY_ERROR = "<b>Reply to a message to use this command.</b>"
 
