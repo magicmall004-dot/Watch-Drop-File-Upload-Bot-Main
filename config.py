@@ -5,7 +5,10 @@ API_ID = int(os.environ.get("API_ID", "21404189"))
 API_HASH = os.environ.get("API_HASH", "bd7028cc6f1bad77cd8e53023bf895b6")
 
 # Bot token
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "8434337760:AAFKQvjOHBFTiM_zdz-jaDgR_J8YdPl7Iow")
+TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "8434337760:AAFKQvjOHBFTiM_zdz-jaDgR_J8YdPl7Iow")
+
+# Workers (number of concurrent tasks)
+TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "4"))
 
 # Database channel
 CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1002973651102"))
@@ -15,7 +18,7 @@ OWNER = os.environ.get("OWNER", "Magic_Mall_GameShop")   # Without @
 OWNER_ID = int(os.environ.get("OWNER_ID", "1849257766"))
 
 # Database URL
-DATABASE_URL = os.environ.get("DATABASE_URL", "")
+DATABASE_URL = os.environ.get("DATABASE_URL", "mongodb+srv://Flame:HtunHlaAung-007047@watch-drop.cmn22zb.mongodb.net/?retryWrites=true&w=majority&appName=WATCH-DROP")
 
 # Support group link
 BAN_SUPPORT = os.environ.get("BAN_SUPPORT", "https://t.me/MagicMallCustomerSupportBot")
@@ -30,8 +33,11 @@ CUSTOM_CAPTION = os.environ.get("CUSTOM_CAPTION", "• ʙʏ @WatchDrop")
 # File protect
 PROTECT_CONTENT = os.environ.get("PROTECT_CONTENT", "False").lower() == "true"
 
-# Fsub expiry
+# Fsub expiry (minutes)
 FSUB_LINK_EXPIRY = int(os.environ.get("FSUB_LINK_EXPIRY", "10"))
+
+# Web server PORT (for Render + UptimeRobot)
+PORT = int(os.environ.get("PORT", "8080"))
 
 # Text templates
 START_MSG = """
